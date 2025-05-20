@@ -129,9 +129,9 @@ Edit
 proclore [pid]
 Examples:
 
-proclore → Show current process info
+proclore → Show info about the current process
 
-proclore 1234 → Show info for process with PID 1234
+proclore 1234 → Show info about process with PID 1234
 
 🔹 seek
 Search for files or directories.
@@ -142,32 +142,10 @@ Edit
 seek [-d] [-f] [-e] target [directory]
 Examples:
 
-seek -d myfolder → Search for directory named myfolder
+seek -d foldername → Search for directory named foldername
 
-seek -f main.c → Search for file named main.c
+seek -f file.txt → Search for file named file.txt
 
-seek -e myscript.sh → Execute or open the found file or directory
-
-🚀 Usage
-Compile the source code using a C compiler:
-
-bash
-Copy
-Edit
-gcc -o cshell *.c
-Run the shell:
-
-bash
-Copy
-Edit
-./cshell
-Start using built-in commands:
-
-bash
-Copy
-Edit
-hop ~
-reveal -a -l
-log execute 2
+seek -e file.sh → Execute file or open directory if found
 ✅ Conclusion
 This C Shell is a functional, feature-rich, and interactive command-line environment. It supports directory navigation, background jobs, detailed file listings, command history, and more — all designed to make shell usage more powerful and efficient.
