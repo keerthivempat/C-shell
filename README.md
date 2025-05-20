@@ -1,40 +1,166 @@
-Displaying prompt:
-The prompt is generated and displayed by the display_prompt function, which is defined in the prompt.c file and declared in the prompt.h header file.
-char *home_directory: This represents the shell's home directory. The prompt will show paths relative to this directory when inside it, and absolute paths when outside.
-char system_name[HOST_NAME_MAX]: Stores the name of the system (hostname).
-char cwd[PATH_MAX]: Stores the current working directory as an absolute path.
-char relative_path[PATH_MAX]: Stores the path relative to the home directory if the current directory is within the home directory. Otherwise, it stores the absolute path.
+C Shell
+Overview
+This C Shell implementation provides a variety of built-in commands to manage directories, execute programs, handle background processes, and maintain command history. It is designed to offer a streamlined and user-friendly shell experience.
 
-hop:
-The hop function changes the current working directory of the shell based on the given path. It also provides specific functionality for paths like ~ (home directory) and - (last visited directory). After changing the directory, it updates the shell's state to reflect this change.
-The function handles errors for invalid directories, such as attempting to change to a directory that does not exist or trying to use - without having a last directory set.
+Features and Functionalities
+1. Directory Management
+Get Current Working Directory: Displays the current directory path in the shell prompt.
 
-reveal:
-COLOR_RESET, COLOR_DIR, COLOR_EXEC, COLOR_LINK: Define ANSI escape codes for coloring the terminal output. These are used to differentiate directories, executable files, and symbolic links by color.
-Before listing the files, the total number of blocks used by the files in the directory is calculated if op_l is set. This involves iterating over the directory entries and using stat to get the file's block size. The result is printed as total X, where X is the total block count divided by 2
+Change Directory: Supports changing directories, including handling ~ for the home directory, .. for the parent, and - for the previous directory.
 
-log:
-void displayHistory();
-This function displays the history of commands stored in the log.
-If no commands have been stored (logCount is 0), it prints "No commands in log.". stores the last 15 commands, if we write more than that then it overwrites.
+Display Host and Username: The shell prompt shows the current user and system hostname.
 
-proclore:
-displays information about the process such as its status, process group, virtual memory size, and the path to the executable.
-A switch statement is used to convert the single-character status code into a more meaningful string:
-'R': Running (R+ if it's in the foreground, R if it's in the background).
-'S': Sleeping (S+ if it's in the foreground, S if it's in the background).
-'Z': Zombie.
-default: Unknown status.
-The function is meant to be called with an optional PID string. If no PID is provided, it defaults to the current process. It prints all the gathered information to the console.
+2. Command Execution
+Sequential and Background Execution: Supports executing multiple commands sequentially and in the background using &.
 
-Seek:
-search for directories, files, or both, and to execute a command on the found items.
-Matched directories are printed in blue (\033[1;34m) and matched files in green (\033[1;32m).
-The function checks if both only_dirs and only_files flags are set. If so, it prints an error message because it's invalid to search for both files and directories exclusively.
+Custom Command Parsing: Commands are properly tokenized, trimmed, and executed. Whitespace and tabs are handled cleanly.
 
-utilities.c file:
-The utilities.c file defines a set of utility functions. These functions handle system information retrieval, path manipulation, job management, and command execution in the background. 
-System Information Functions: These help retrieve details like the system's hostname, current user's name, current working directory, and relative path from the home directory.
-Background Job Management: The program can execute commands in the background, track them, and manage their lifecycle (checking if they are completed and cleaning up the job list).
-Echo Handling: The handle_echo() function simulates the echo command by printing whatever comes after "echo " in the input string.
-Background Job Monitoring: The shell regularly checks for completed background jobs and updates the job list accordingly.
+Command Handler: Built-in commands are detected and executed internally, while unknown commands are passed to the system.
+
+3. Directory Navigation (hop Command)
+Navigate through directories with support for:
+
+~ → Home directory
+
+.. → Parent directory
+
+- → Previous directory
+
+4. File and Directory Listing (reveal Command)
+Lists files and directories with the following options:
+
+-a → Include hidden files
+
+-l → Show detailed information (permissions, size, etc.)
+
+Outputs are color-coded based on file types.
+
+5. Command History (log Command)
+Maintains a log of previously executed commands (up to 15), avoiding consecutive duplicates.
+
+Provides the following options:
+
+View command history.
+
+Clear all history with log purge.
+
+Re-execute a command from history using log execute [n].
+
+6. Background Process Management
+Supports running processes in the background with &.
+
+Automatically handles termination of background processes.
+
+Displays completion messages for finished background jobs.
+
+7. Process Information (proclore Command)
+Displays detailed information about a process.
+
+Without arguments, shows the current process.
+
+With a PID, shows information about the specified process.
+
+8. File and Directory Search (seek Command)
+Allows searching for files and directories with the following options:
+
+-d → Search for directories
+
+-f → Search for files
+
+-e → Execute a file or switch to the found directory
+
+Available Commands
+hop
+Change directories.
+
+bash
+Copy
+Edit
+hop [directory]
+Examples:
+
+hop ~ → Go to the home directory
+
+hop - → Go to the previous directory
+
+reveal
+List files and directories.
+
+bash
+Copy
+Edit
+reveal [-a] [-l] [directory]
+Examples:
+
+reveal -a → Show all files including hidden ones
+
+reveal -l → Show detailed file information
+
+log
+Manage command history.
+
+bash
+Copy
+Edit
+log
+log purge
+log execute [n]
+Examples:
+
+log → Show history
+
+log purge → Clear history
+
+log execute 3 → Run the 3rd most recent command
+
+proclore
+Display process information.
+
+bash
+Copy
+Edit
+proclore [pid]
+Examples:
+
+proclore → Show current process info
+
+proclore 1234 → Show info for process with PID 1234
+
+seek
+Search for files or directories.
+
+bash
+Copy
+Edit
+seek [-d] [-f] [-e] target [directory]
+Examples:
+
+seek -d myfolder → Search for directory named myfolder
+
+seek -f main.c → Search for file named main.c
+
+seek -e myscript.sh → Execute or open the found file or directory
+
+Usage
+Compile the source code using a C compiler:
+
+bash
+Copy
+Edit
+gcc -o cshell *.c
+Run the shell:
+
+bash
+Copy
+Edit
+./cshell
+Start using built-in commands:
+
+bash
+Copy
+Edit
+hop ~
+reveal -a -l
+log execute 2
+Conclusion
+This C Shell is a functional, feature-rich, and interactive command-line environment. It supports directory navigation, background jobs, detailed file listings, command history, and more — all designed to make shell usage more powerful and efficient.
