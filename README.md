@@ -93,9 +93,6 @@ hop - → Go to the previous directory
 🔹 reveal
 List files and directories.
 
-bash
-Copy
-Edit
 reveal [-a] [-l] [directory]
 Examples:
 
@@ -106,9 +103,6 @@ reveal -l → Show detailed file information
 🔹 log
 Manage command history.
 
-bash
-Copy
-Edit
 log
 log purge
 log execute [n]
@@ -123,9 +117,6 @@ log execute 3 → Run the 3rd most recent command
 🔹 proclore
 Display process information.
 
-bash
-Copy
-Edit
 proclore [pid]
 Examples:
 
@@ -136,9 +127,6 @@ proclore 1234 → Show info about process with PID 1234
 🔹 seek
 Search for files or directories.
 
-bash
-Copy
-Edit
 seek [-d] [-f] [-e] target [directory]
 Examples:
 
