@@ -2,138 +2,145 @@
 
 ## Overview
 
-This C Shell implementation provides a variety of built-in commands to manage directories, execute programs, handle background processes, and maintain command history. It is designed to offer a streamlined and user-friendly shell experience.
-
----
+This C Shell implementation provides a variety of features and functionalities to manage directories, execute commands, handle background processes, and maintain command history.
 
 ## Features and Functionalities
 
-### 1. 📁 Directory Management
+### 1. Directory Management
 
-- **Get Current Working Directory**: Displays the current directory path in the shell prompt.
-- **Change Directory**: Supports changing directories, including handling `~` for the home directory, `..` for the parent, and `-` for the previous directory.
-- **Display Host and Username**: The shell prompt shows the current user and system hostname.
+- Get Current Working Directory
+  - Retrieves the current working directory and displays it in the shell prompt.
 
----
+- Change Directory
+  - Changes the current working directory to the specified path.
+  - Handles special cases like `~` and `...`.
 
-### 2. ⚙️ Command Execution
+- Get Hostname
+  - Retrieves the hostname of the system for display in the prompt.
 
-- **Sequential and Background Execution**: Supports executing multiple commands sequentially and in the background using `&`.
-- **Custom Command Parsing**: Commands are properly tokenized, trimmed, and executed. Whitespace and tabs are handled cleanly.
-- **Command Handler**: Built-in commands are detected and executed internally, while unknown commands are passed to the system.
+- Get Username
+  - Retrieves the username of the current user for display in the prompt.
 
----
+### 2. Command Handling
 
-### 3. 🧭 Directory Navigation (`hop` Command)
+- Command Processing
+  - Tokenizes the input command string and executes each command sequentially.
+  - Supports background execution using `&`.
 
-Navigate through directories with support for:
-- `~` → Home directory  
-- `..` → Parent directory  
-- `-` → Previous directory  
+- Command Routing
+  - Routes commands to the appropriate handler based on the command name.
 
----
+- Input Processing
+  - Removes leading and trailing whitespace from user input.
 
-### 4. 📂 File and Directory Listing (`reveal` Command)
+### 3. Directory Navigation
 
-- Lists files and directories with the following options:
-  - `-a` → Include hidden files
-  - `-l` → Show detailed information (permissions, size, etc.)
-- Outputs are color-coded based on file types.
+- Directory Hopping
+  - Provides an intuitive way to navigate directories.
+  - Supports special cases like `~` (home directory) and `-` (previous directory).
 
----
+### 4. File and Directory Listing
 
-### 5. 📜 Command History (`log` Command)
+- File and Directory Display
+  - Lists files and directories in a clear format.
+  - Supports flags `-a` for all files (including hidden) and `-l` for detailed information.
 
-- Maintains a log of previously executed commands (up to 15), avoiding consecutive duplicates.
-- Provides the following options:
-  - View command history.
-  - Clear all history with `log purge`.
-  - Re-execute a command from history using `log execute [n]`.
+- Detailed Information Display
+  - Shows detailed information about files and directories including permissions, size, and timestamps.
 
----
+- Color Coding
+  - Displays file and directory names with color coding based on their type for better readability.
 
-### 6. 🔧 Background Process Management
+### 5. Command History
 
-- Supports running processes in the background with `&`.
-- Automatically handles termination of background processes.
-- Displays completion messages for finished background jobs.
+- History Management
+  - Loads and saves command history for persistence between sessions.
+  - Avoids duplicate entries in the history.
 
----
+- History Display
+  - Shows the command history with numbering for easy reference.
 
-### 7. 🔍 Process Information (`proclore` Command)
+- Input Normalization
+  - Removes unnecessary spaces and tabs from commands before adding to history.
 
-- Displays detailed information about a process.
-  - Without arguments, shows the current process.
-  - With a PID, shows information about the specified process.
+- History Manipulation
+  - Provides commands to clear history and re-execute commands from history.
 
----
+### 6. Background Process Management
 
-### 8. 🗃️ File and Directory Search (`seek` Command)
+- Signal Handling
+  - Sets up proper signal handling for background processes.
 
-- Allows searching for files and directories with the following options:
-  - `-d` → Search for directories
-  - `-f` → Search for files
-  - `-e` → Execute a file or switch to the found directory
+- Process Tracking
+  - Maintains a list of background processes for monitoring.
+  - Handles process cleanup when background processes terminate.
 
----
+- Background Execution
+  - Allows commands to be executed in the background with the `&` operator.
+
+### 7. Process Information
+
+- Process Details
+  - Displays detailed information about processes including state, memory usage, etc.
+
+### 8. File Search
+
+- File and Directory Search
+  - Searches for files and directories matching specified criteria.
+  - Supports flags `-d` for directories, `-f` for files, and `-e` for executing or changing to found items.
 
 ## Available Commands
 
-### 🔹 `hop`
-Change directories.
+### hop
 
-```bash
-hop [directory]
-Examples:
+- **Description**: Changes the current directory.
+- **Usage**: `hop [directory]`
+- **Examples**:
+  - `hop ~` - Changes to the home directory.
+  - `hop -` - Changes to the previous directory.
 
-hop ~ → Go to the home directory
+### reveal
 
-hop - → Go to the previous directory
+- **Description**: Lists files and directories.
+- **Usage**: `reveal [-a] [-l] [directory]`
+- **Examples**:
+  - `reveal -a` - Lists all files including hidden ones.
+  - `reveal -l` - Lists files with detailed information.
 
-🔹 reveal
-List files and directories.
+### log
 
-reveal [-a] [-l] [directory]
-Examples:
+- **Description**: Manages command history.
+- **Usage**:
+  - `log` - Prints the command history.
+  - `log purge` - Clears the command history.
+  - `log execute [n]` - Re-executes the nth command from history.
 
-reveal -a → Show all files including hidden ones
+### proclore
 
-reveal -l → Show detailed file information
+- **Description**: Displays detailed information about a process.
+- **Usage**: `proclore [pid]`
+- **Examples**:
+  - `proclore` - Displays information about the current process.
+  - `proclore 1234` - Displays information about the process with PID 1234.
 
-🔹 log
-Manage command history.
+### seek
 
-log
-log purge
-log execute [n]
-Examples:
+- **Description**: Searches for files and directories.
+- **Usage**: `seek [-d] [-f] [-e] target [directory]`
+- **Examples**:
+  - `seek -d target` - Searches for directories matching the target.
+  - `seek -f target` - Searches for files matching the target.
+  - `seek -e target` - Executes or changes to the found file or directory.
 
-log → Show history
+## Usage
 
-log purge → Clear history
+To use this C Shell, compile the source files and run the resulting executable. The shell supports various built-in commands as described above. For example:
 
-log execute 3 → Run the 3rd most recent command
+- `hop ~` to change to the home directory.
+- `reveal -a -l` to list all files and directories with detailed information.
+- `log purge` to clear the command history.
+- `seek -d target` to search for directories matching the target.
 
-🔹 proclore
-Display process information.
+## Conclusion
 
-proclore [pid]
-Examples:
-
-proclore → Show info about the current process
-
-proclore 1234 → Show info about process with PID 1234
-
-🔹 seek
-Search for files or directories.
-
-seek [-d] [-f] [-e] target [directory]
-Examples:
-
-seek -d foldername → Search for directory named foldername
-
-seek -f file.txt → Search for file named file.txt
-
-seek -e file.sh → Execute file or open directory if found
-✅ Conclusion
-This C Shell is a functional, feature-rich, and interactive command-line environment. It supports directory navigation, background jobs, detailed file listings, command history, and more — all designed to make shell usage more powerful and efficient.
+This C Shell provides a comprehensive set of features for managing directories, executing commands, handling background processes, and maintaining command history. It is designed to be a functional and user-friendly shell environment.
